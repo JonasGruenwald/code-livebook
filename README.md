@@ -12,7 +12,8 @@ It can however make the process of starting a LiveBook in the context of a vscod
 
 * Automatically starts a Livebook server when a `.livemd` file is opened in a vscode workspace
 * The server is reused within the workspace when multiple livebooks are opened and shut down when all views close
-* Can optionally be configured to use an existing running livebook server
+* Can be configured to use an existing running livebook server
+* Can be configured to attach notebooks to your running project
 * Falls back to the default text editor for diff views
 * 🦊 icon for `.livemd` files
 
