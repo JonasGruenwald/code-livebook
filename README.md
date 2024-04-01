@@ -1,6 +1,6 @@
 # Visual Studio Code LiveBook Extension
 
-![Screenshot](./media/screenshot.png)
+![Screenshot](https://github.com/JonasGruenwald/code-livebook/blob/main/media/screenshot.png)
 
 This is an extension that allows opening [Elixir LiveBook](https://livebook.dev/) files directly inside Visual Studio Code.
 
@@ -14,9 +14,7 @@ It can however make the process of starting a LiveBook in the context of a vscod
 * The server is reused within the workspace when multiple livebooks are opened and shut down when all views close
 * Can optionally be configured to use an existing running livebook server
 * Falls back to the default text editor for diff views
-* <img src="./icons/livebook.svg" alt="LiveBook Icon" width="12"/> icon for `.livemd` files
-
-<img src="./media/demo.gif" alt="Demo Gif" width="500"/>
+* 🦊 icon for `.livemd` files
 
 ## Setup
 

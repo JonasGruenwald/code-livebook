@@ -1,7 +1,7 @@
 {
   "name": "code-livebook",
   "displayName": "VS Code LiveBook",
-  "description": "Use Elixir LiveBooks inside Visual Studio Code ee",
+  "description": "Use Elixir LiveBooks inside Visual Studio Code",
   "version": "1.0.0",
   "publisher": "JonasGruenwald",
   "repository": "https://github.com/JonasGruenwald/code-livebook",
@@ -19,12 +19,6 @@
     "workspace"
   ],
   "contributes": {
-    "commands": [
-      {
-        "command": "code-livebook.openNewLiveBook",
-        "title": "Open New LiveBook"
-      }
-    ],
     "configuration": {
       "title": "Code LiveBook",
       "properties": {
@@ -86,6 +80,8 @@
     ]
   },
   "scripts": {
+    "package": "pnpm vsce package --no-dependencies",
+    "publish": "pnpm vsce publish --no-dependencies",
     "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
