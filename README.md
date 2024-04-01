@@ -1,71 +1,77 @@
-# code-livebook README
+# Visual Studio Code LiveBook Extension
 
-This is the README for your extension "code-livebook". After writing up a brief description, we recommend including the following sections.
+![Screenshot](./media/screenshot.png)
+
+This is an extension that allows opening [Elixir LiveBook](https://livebook.dev/) files directly inside Visual Studio Code.
+
+Please note that it is only embedding LiveBook in a Webview, so all vscode related functionality like the Copilot context and search will not be available.
+
+It can however make the process of starting a LiveBook in the context of a vscode project a little bit quicker.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+* Automatically starts a Livebook server when a `.livemd` file is opened in a vscode workspace
+* The server is reused within the workspace when multiple livebooks are opened and shut down when all views close
+* Can optionally be configured to use an existing running livebook server
+* Falls back to the default text editor for diff views
+* <img src="./icons/livebook.svg" alt="LiveBook Icon" width="12"/> icon for `.livemd` files
 
-For example if there is an image subfolder under your extension project workspace:
+<img src="./media/demo.gif" alt="Demo Gif" width="500"/>
 
-\!\[feature X\]\(images/feature-x.png\)
+## Setup
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### When using Autostart (Default)
 
-## Requirements
+In order for the extension to automatically start Livebook when a `.livemd` file is opened, you **must intall the escripts version of Livebook** as described here:
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+https://github.com/livebook-dev/livebook?tab=readme-ov-file#escript
 
-## Extension Settings
+This means you must also have a working local Elixir setup with the required dependencies.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+The extension will try to look for the livebook executable in `$HOME/.mix/escripts/livebook`
 
-For example:
+If the directory where Elixir keeps escripts is different on your system, please set the path the the livebook executable in the extension configuration `code-livebook.livebookExecutablePath`
 
-This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+##### Attach to your local runtime
 
-## Known Issues
+You may want to automatically attach the opened notebook to your project's runtime, the extension provides a setting for the default runtime used by the server, you can set this in your local worspace config like so:
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+1. Start your elixir project as a node with a cookie
 
-## Release Notes
+```bash
+elixir --sname NODE --cookie COOKIE -S mix run --no-halt
+```
 
-Users appreciate release notes as you update your extension.
+2. At your workspace root create a `.vscode/settings.json` and set the relevant setting there
 
-### 1.0.0
 
-Initial release of ...
+```json
+{
+  "code-livebook.livebookRuntime": "attached:NODE:COOKIE"
+}
+```
 
-### 1.0.1
+When you open a livebook in your workspace and your node is running, the livebook should connect to your node
 
-Fixed issue #.
+### When using your own livebook server
 
-### 1.1.0
+In order to use your own livebook server:
 
-Added features X, Y, and Z.
+* Make sure that you have `LIVEBOOK_WITHIN_IFRAME` set to true for your server
+* Make sure that you have `LIVEBOOK_TOKEN_ENABLED` set to false for your server
+* Make sure to set the host and port of your livebook server in the extension settings, and disable the setting to autostart the livebook server
 
----
+See: https://hexdocs.pm/livebook/readme.html#environment-variables
 
-## Following extension guidelines
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+## Thoughts / Issues
+* You can navigate away from the openend notebook within the webview. There is nothing that can be done to stop this from the extension host
+* Generally this extension is a bit counter to how vscode editors are supposed to work, but I think there is currently not a better way to do this, since [livebook doesn't really support editing its datamodel from another editor](https://elixirforum.com/t/livebook-inside-regular-editor/55581/7) 
+* I could imagine a more ambitious version of this extension, along with a LiveBook integration which communicates with the extension host through messaging on the webview to enable more of an integrated experience, including Copilot Chat context etc. – I don't have time to do this but maybe someone else has
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+## Develop / Contribute 
 
-## Working with Markdown
+Please feel free to contribute features / fixes if you would like to.
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+The extension is set up with the default yeoman template, no bundler is used, just tsc. 

@@ -1,9 +1,10 @@
 {
   "name": "code-livebook",
-  "displayName": "code-livebook",
+  "displayName": "VS Code LiveBook",
   "description": "Use Elixir LiveBooks inside Visual Studio Code ee",
   "version": "0.0.1",
   "publisher": "JonasGruenwald",
+  "repository": "https://github.com/JonasGruenwald/code-livebook",
   "license": "MIT",
   "engines": {
     "vscode": "^1.87.0"
@@ -29,22 +30,27 @@
         "code-livebook.autoStartServer": {
           "type": "boolean",
           "default": true,
-          "description": "Whether to automatically start the LiveBook server when opening a LiveBook. If set to false, you need to specifiy a host and port manually. The server will be started via escripts, so make sure you have the LiveBook executable installed via escripts. The autostarted server terminates when the last LiveBook is closed."
+          "markdownDescription": "Whether to automatically start the LiveBook server when opening a LiveBook.\nIf set to false, you need to specifiy a host and port manually.\nThe server will be started via escripts, so make sure you have the LiveBook executable installed via escripts.\nThe autostarted server terminates when the last LiveBook is closed."
         },
         "code-livebook.livebookPort": {
           "type": "number",
           "default": 0,
-          "description": "The port on which the LiveBook server should run (0 for a random port). It's best to leave this at 0 unless you are running your own server, otherwise you might run into port conflicts when using autoStartServer"
+          "markdownDescription": "The port on which the LiveBook server should run (0 for a random port).\n\nIt's best to leave this at 0 unless you are running your own server, otherwise you might run into port conflicts when using autoStartServer"
         },
         "code-livebook.livebookHost": {
           "type": "string",
           "default": "http://localhost",
-          "description": "The host on which the LiveBook server is expected to run. (only applicable if autoStartServer is false)"
+          "markdownDescription": "The host on which the LiveBook server is expected to run. (only applicable if autoStartServer is false)"
+        },
+        "code-livebook.livebookRuntime": {
+          "type": "string",
+          "default": "standalone",
+          "markdownDescription": "The default runtime that notebooks will connect to.\nTo make notebooks attach to your project runtime, set this to `attached:NODE:COOKIE`.\nWith the node name and cookie value of your running node. You can start your local mix project as a node with `elixir --sname NODE --cookie COOKIE -S mix run --no-halt` "
         },
         "code-livebook.livebookExecutablePath": {
           "type": "string",
           "default": null,
-          "description": "The path to the LiveBook executable, will look in the users's .mix/escripts by default. Note that this must be the executable installed via escripts, the desktop distribution of LiveBook is NOT supported. (only applicable if autoStartServer is true)"
+          "markdownDescription": "The path to the LiveBook executable.\nThe default assumed path is `$HOME/.mix/escripts/livebook`.\nNote that this **must be the executable installed via escripts**, the desktop distribution of LiveBook is NOT supported.\n(only applicable if autoStartServer is true)"
         }
       }
     },

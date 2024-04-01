@@ -10,11 +10,9 @@ class ErrorDocument implements vscode.CustomDocument {
     this.uri = uri;
     this.message = message;
   }
-
   dispose(): void {
     // no-op
   }
-
 }
 
 class LiveBookDocument implements vscode.CustomDocument {
@@ -55,8 +53,6 @@ export class LiveBookViewer implements vscode.CustomReadonlyEditorProvider {
   }
 
   async resolveCustomEditor(document: vscode.CustomDocument, webviewPanel: vscode.WebviewPanel, _token: vscode.CancellationToken): Promise<void> {
-    // TODO: Implement logic to resolve the custom editor
-    // For example, you can update the webview panel with the content of the custom document
     webviewPanel.webview.options = {
       enableScripts: true,
     };

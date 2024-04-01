@@ -33,23 +33,29 @@ class LiveBookServer {
     const autoStartServer = config.get<boolean>("autoStartServer") ?? true;
     const liveBookPort = config.get<number>("livebookPort") ?? 0;
     const liveBookHost = config.get<string>("livebookHost") || "http://localhost";
+    const liveBookRuntime = config.get<string>("livebookRuntime") || "standalone";
     const liveBookExectablePath = config.get<string>("livebookExecutablePath") || path.join(homedir(), ".mix", "escripts", "livebook");
     this.managed = autoStartServer;
     if (this.managed) {
       if (!fs.existsSync(liveBookExectablePath)) {
         throw new Error(`LiveBook executable not found at ${liveBookExectablePath}`);
       }
-      log(`Starting server at ${liveBookExectablePath}`);
+      const environment = {
+        "LIVEBOOK_WITHIN_IFRAME": "true",
+        "LIVEBOOK_PORT": liveBookPort.toString(),
+        "LIVEBOOK_SHUTDOWN_ENABLED": "false",
+        "LIVEBOOK_DEFAULT_RUNTIME": liveBookRuntime,
+        "PATH": process.env.PATH,
+        "HOME": homedir(),
+      };
+
+      log(`Starting server at ${liveBookExectablePath} , Environment: 
+${JSON.stringify(environment, null, 2)}`);
 
       // Start the livebook server
       this.processHandle = spawn(liveBookExectablePath, ["server"], {
         shell: true,
-        env: {
-          "LIVEBOOK_WITHIN_IFRAME": "true",
-          "LIVEBOOK_PORT": liveBookPort.toString(),
-          "PATH": process.env.PATH,
-          "HOME": homedir(),
-        }
+        env: environment
       });
 
       // Wait for the server to start, ready resolves when the server URL has been extracted
@@ -103,6 +109,11 @@ class LiveBookServer {
   };
 
   terminate = () => {
+    try {
+      this.processHandle?.kill();
+    } catch (e) {
+      log("Couldn't kill livebook server process.");
+    }
     log(`Shutting down server at ${this.url}`);
   };
 }
@@ -112,6 +123,11 @@ let server: LiveBookServer | null = null;
 
 export const getServer = (): LiveBookServer => {
   if (!server) {
+    server = new LiveBookServer();
+  }
+  if (server.stale) {
+    log("Server is stale, restarting");
+    server.terminate();
     server = new LiveBookServer();
   }
   server.viewers++;
