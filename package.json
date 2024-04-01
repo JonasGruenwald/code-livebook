@@ -1,0 +1,100 @@
+{
+  "name": "code-livebook",
+  "displayName": "code-livebook",
+  "description": "Use Elixir LiveBooks inside Visual Studio Code ee",
+  "version": "0.0.1",
+  "publisher": "JonasGruenwald",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.87.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "extensionKind": [
+    "workspace"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "code-livebook.openNewLiveBook",
+        "title": "Open New LiveBook"
+      }
+    ],
+    "configuration": {
+      "title": "Code LiveBook",
+      "properties": {
+        "code-livebook.autoStartServer": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to automatically start the LiveBook server when opening a LiveBook. If set to false, you need to specifiy a host and port manually. The server will be started via escripts, so make sure you have the LiveBook executable installed via escripts. The autostarted server terminates when the last LiveBook is closed."
+        },
+        "code-livebook.livebookPort": {
+          "type": "number",
+          "default": 0,
+          "description": "The port on which the LiveBook server should run (0 for a random port). It's best to leave this at 0 unless you are running your own server, otherwise you might run into port conflicts when using autoStartServer"
+        },
+        "code-livebook.livebookHost": {
+          "type": "string",
+          "default": "http://localhost",
+          "description": "The host on which the LiveBook server is expected to run. (only applicable if autoStartServer is false)"
+        },
+        "code-livebook.livebookExecutablePath": {
+          "type": "string",
+          "default": null,
+          "description": "The path to the LiveBook executable, will look in the users's .mix/escripts by default. Note that this must be the executable installed via escripts, the desktop distribution of LiveBook is NOT supported. (only applicable if autoStartServer is true)"
+        }
+      }
+    },
+    "configurationDefaults": {
+      "workbench.editorAssociations": {
+        "{git,gitlens}:/**/*.livemd": "default"
+      }
+    },
+    "customEditors": [
+      {
+        "viewType": "code-livebook.liveBookViewer",
+        "displayName": "LiveBook Viewer",
+        "selector": [
+          {
+            "filenamePattern": "*.livemd"
+          }
+        ],
+        "priority": "default"
+      }
+    ],
+    "languages": [
+      {
+        "id": "elixir-livebook",
+        "extensions": [
+          ".livemd"
+        ],
+        "icon": {
+          "light": "./icons/livebook.svg",
+          "dark": "./icons/livebook.svg"
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "pnpm run compile && pnpm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.87.0",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
+    "@vscode/test-cli": "^0.0.8",
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.57.0",
+    "typescript": "^5.3.3"
+  }
+}
