@@ -2,10 +2,11 @@
   "name": "code-livebook",
   "displayName": "VS Code LiveBook",
   "description": "Use Elixir LiveBooks inside Visual Studio Code ee",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "publisher": "JonasGruenwald",
   "repository": "https://github.com/JonasGruenwald/code-livebook",
   "license": "MIT",
+  "icon" : "./icons/icon_128x128@2x.png",
   "engines": {
     "vscode": "^1.87.0"
   },
