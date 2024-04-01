@@ -1,6 +1,6 @@
 # Visual Studio Code LiveBook Extension
 
-![Screenshot](https://github.com/JonasGruenwald/code-livebook/blob/main/media/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/JonasGruenwald/code-livebook/main/media/screenshot.png)
 
 This is an extension that allows opening [Elixir LiveBook](https://livebook.dev/) files directly inside Visual Studio Code.
 
