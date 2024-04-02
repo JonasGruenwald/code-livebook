@@ -88,15 +88,16 @@ export class LiveBookViewer implements vscode.CustomReadonlyEditorProvider {
             sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-downloads allow-popups" allow="cross-origin-isolated; autoplay; clipboard-read; clipboard-write"
             src="${src}"></iframe>
             <script>
-            console.log('webview script');
             const vscode = acquireVsCodeApi();
             const iframe = document.querySelector('iframe');
-            iframe.addEventListener('load', (e) => {
-              console.log('iframe loaded', e);
-              vscode.postMessage({ type: 'iframe-loaded' });
-            });
+            window.addEventListener("message", (e) => {
+            console.log('iframe message received', e.data);
+             const data = JSON.parse(e.data);
+             if(data.type === 'keydown'){
+              window.dispatchEvent(new KeyboardEvent('keydown', data));
+             }
+          }, false);
             </script>
-
             </html>`;
   }
 

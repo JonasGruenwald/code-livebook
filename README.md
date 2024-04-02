@@ -25,6 +25,12 @@ In order for the extension to automatically start Livebook when a `.livemd` file
 
 https://github.com/livebook-dev/livebook?tab=readme-ov-file#escript
 
+**Note** the offical livebook version does not forward keyboard shortcuts up to vscode, so the experience will be somewhat limited. You can instead install my fork which integrates with this extension:
+
+```bash
+mix escript.install github JonasGruenwald/livebook_embedded branch main
+```
+
 This means you must also have a working local Elixir setup with the required dependencies.
 
 The extension will try to look for the livebook executable in `$HOME/.mix/escripts/livebook`
@@ -65,10 +71,9 @@ See: https://hexdocs.pm/livebook/readme.html#environment-variables
 
 
 ## Thoughts / Issues
-* A big issue is hotkeys not working, see: https://github.com/microsoft/vscode/issues/129178 
-* You can navigate away from the openend notebook within the webview. There is nothing that can be done to stop this from the extension host
+* Even with my liveview fork which forwards events, there are some inconsistencies when switching focus between livebook and vscode, especially with livebook's own monaco editor instances, this should be improved upon
 * Generally this extension is a bit counter to how vscode editors are supposed to work, but I think there is currently not a better way to do this, since [livebook doesn't really support editing its datamodel from another editor](https://elixirforum.com/t/livebook-inside-regular-editor/55581/7) 
-* I could imagine a more ambitious version of this extension, along with a LiveBook integration which communicates with the extension host through messaging on the webview to enable more of an integrated experience, including Copilot Chat context etc. – I don't have time to do this but maybe someone else has
+* ~~I could imagine a more ambitious version of this extension, along with a LiveBook integration which communicates with the extension host through messaging on the webview to enable more of an integrated experience, including Copilot Chat context etc. – I don't have time to do this but maybe someone else has~~  -> Since I have no made a fork of livebook to support the extension better, this could be added there
 
 ## Develop / Contribute 
 
