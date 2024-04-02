@@ -29,7 +29,7 @@ This means you must also have a working local Elixir setup with the required dep
 
 The extension will try to look for the livebook executable in `$HOME/.mix/escripts/livebook`
 
-If the directory where Elixir keeps escripts is different on your system, please set the path the the livebook executable in the extension configuration `code-livebook.livebookExecutablePath`
+If the directory where Elixir keeps escripts is different on your system, please set the path to the livebook executable in the extension configuration `code-livebook.livebookExecutablePath`
 
 
 ##### Attach to your local runtime
@@ -65,6 +65,7 @@ See: https://hexdocs.pm/livebook/readme.html#environment-variables
 
 
 ## Thoughts / Issues
+* A big issue is hotkeys not working, see: https://github.com/microsoft/vscode/issues/129178 
 * You can navigate away from the openend notebook within the webview. There is nothing that can be done to stop this from the extension host
 * Generally this extension is a bit counter to how vscode editors are supposed to work, but I think there is currently not a better way to do this, since [livebook doesn't really support editing its datamodel from another editor](https://elixirforum.com/t/livebook-inside-regular-editor/55581/7) 
 * I could imagine a more ambitious version of this extension, along with a LiveBook integration which communicates with the extension host through messaging on the webview to enable more of an integrated experience, including Copilot Chat context etc. – I don't have time to do this but maybe someone else has
