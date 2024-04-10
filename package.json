@@ -2,11 +2,11 @@
   "name": "code-livebook",
   "displayName": "VS Code LiveBook",
   "description": "Use Elixir LiveBooks inside Visual Studio Code",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "publisher": "JonasGruenwald",
   "repository": "https://github.com/JonasGruenwald/code-livebook",
   "license": "MIT",
-  "icon" : "./icons/icon_128x128@2x.png",
+  "icon": "./icons/icon_128x128@2x.png",
   "engines": {
     "vscode": "^1.87.0"
   },
@@ -46,6 +46,17 @@
           "type": "string",
           "default": null,
           "markdownDescription": "The path to the LiveBook executable.\nThe default assumed path is `$HOME/.mix/escripts/livebook`.\nNote that this **must be the executable installed via escripts**, the desktop distribution of LiveBook is NOT supported.\n(only applicable if autoStartServer is true)"
+        },
+        "code-livebook.livebookEnvironment": {
+          "type": "object",
+          "default": {},
+          "markdownDescription": "Specify additional environment variables to pass to the LiveBook server.\n\nYou may use this to set up livebook features like distribution, which can't be specified in the extension settings.\nYou can find a list of the possible values [here](https://github.com/livebook-dev/livebook/blob/main/README.md#environment-variables) \n\nEnvironment variables specified here will override any vay variables set by the extension, including those set through the other config keys.",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
         }
       }
     },

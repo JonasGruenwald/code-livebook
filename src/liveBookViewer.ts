@@ -35,7 +35,7 @@ export class LiveBookViewer implements vscode.CustomReadonlyEditorProvider {
     const providerRegistration = vscode.window.registerCustomEditorProvider('code-livebook.liveBookViewer', provider, {
       webviewOptions: {
         // I don't think there is a better way
-        retainContextWhenHidden: true,
+        retainContextWhenHidden: true
       }
     });
     return providerRegistration;
@@ -53,12 +53,14 @@ export class LiveBookViewer implements vscode.CustomReadonlyEditorProvider {
   }
 
   async resolveCustomEditor(document: vscode.CustomDocument, webviewPanel: vscode.WebviewPanel, _token: vscode.CancellationToken): Promise<void> {
-    webviewPanel.webview.options = {
-      enableScripts: true,
-    };
+
     if (document instanceof LiveBookDocument) {
-      const src = await document.server.getFileUrl(document.uri);
-      webviewPanel.webview.html = this.getIframeEmbed(src);
+      const { url, port } = await document.server.getConnection(document.uri);
+      webviewPanel.webview.options = {
+        enableScripts: true,
+        portMapping: [{ webviewPort: port, extensionHostPort: port }]
+      };
+      webviewPanel.webview.html = this.getIframeEmbed(url);
       return;
     } else if (document instanceof ErrorDocument) {
       webviewPanel.webview.html = this.getErrorDocument(document.message);
@@ -119,7 +121,16 @@ export class LiveBookViewer implements vscode.CustomReadonlyEditorProvider {
             <p>
             Most likely this is because the LiveBook server is not yet installed at the expected location.
             Please follow the Setup guide on the extension's README to set up the LiveBook server and adjust the extension settings to look for it in the correct place.
-            </p>         
+            </p>
+            <p>
+            The relevant setting is <code>code-livebook.livebookExecutablePath</code>, which should be set to the path of the LiveBook executable you have installed via escripts.
+            </>
+            <p>
+            If you don't want the extension to manage the LiveBook server, you can disable the setting <code>code-livebook.autoStartServer</code> and provide the host and port of your own LiveBook server to connect to
+            </p>
+            <p>
+            Please visit the extension settings for more information.
+            <p/>
             <h2>Error message</h2>
             This is the error message from the extension:
             <pre>

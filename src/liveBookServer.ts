@@ -35,6 +35,7 @@ class LiveBookServer {
     const liveBookHost = config.get<string>("livebookHost") || "http://localhost";
     const liveBookRuntime = config.get<string>("livebookRuntime") || "standalone";
     const liveBookExectablePath = config.get<string>("livebookExecutablePath") || path.join(homedir(), ".mix", "escripts", "livebook");
+    const livebookEnv = config.get<object>("livebookEnvironment") || {};
     this.managed = autoStartServer;
     if (this.managed) {
       if (!fs.existsSync(liveBookExectablePath)) {
@@ -47,6 +48,7 @@ class LiveBookServer {
         "LIVEBOOK_DEFAULT_RUNTIME": liveBookRuntime,
         "PATH": process.env.PATH,
         "HOME": homedir(),
+        ...livebookEnv
       };
 
       log(`Starting server at ${liveBookExectablePath} , Environment: 
@@ -70,7 +72,7 @@ ${JSON.stringify(environment, null, 2)}`);
         this.processHandle.stdout.on('data', (data) => {
           const output = data.toString();
           log(`LIVEBOOK SERVER STDOUT | ${output}`);
-          if (output.includes("[Livebook] Application running at")) {
+          if (this.url === undefined && output.includes("[Livebook] Application running at")) {
             const matches = output.match(urlMatcher);
             if (matches.length >= 2) {
               this.url = matches[1].trim();
@@ -90,7 +92,6 @@ ${JSON.stringify(environment, null, 2)}`);
       });
 
       this.processHandle.on('close', (code) => {
-        log(`LIVEBOOK SERVER process exited with code ${code}`);
         this.stale = true;
       });
 
@@ -100,12 +101,16 @@ ${JSON.stringify(environment, null, 2)}`);
     }
   }
 
-  getFileUrl = async (uri: Uri) => {
+  getConnection = async (uri: Uri) => {
     await this.ready;
     const url = new URL(this.url!);
     url.pathname = "/open";
     url.searchParams.append("path", uri.fsPath);
-    return url.toString();
+
+    return {
+      url: url.toString(),
+      port: Number(url.port),
+    };
   };
 
   terminate = () => {
